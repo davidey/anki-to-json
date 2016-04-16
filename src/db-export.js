@@ -1,4 +1,7 @@
 import sqlite3 from 'sqlite3';
+import Promise from 'bluebird';
+
+Promise.promisifyAll(sqlite3);
 
 sqlite3.verbose();
 
@@ -6,11 +9,11 @@ let output = {
   decks: {}
 };
 
-function dbExport(file) {
+function dbExport(file, callback) {
   const db = new sqlite3.Database(file);
 
   db.serialize(() => {
-    db.get('SELECT * FROM col', function(err, results) {
+    db.getAsync('SELECT * FROM col').then(function(results) {
       const decks = JSON.parse(results.decks);
       const models = JSON.parse(results.models);
 
@@ -46,11 +49,9 @@ function dbExport(file) {
         };
       });
 
-      console.log(JSON.stringify(output, null, 2));
+      callback(false, output);
     });
   });
-
-  return output;
 }
 
 export default dbExport;

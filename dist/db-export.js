@@ -8,7 +8,13 @@ var _sqlite = require('sqlite3');
 
 var _sqlite2 = _interopRequireDefault(_sqlite);
 
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_bluebird2.default.promisifyAll(_sqlite2.default);
 
 _sqlite2.default.verbose();
 
@@ -16,11 +22,11 @@ var output = {
   decks: {}
 };
 
-function dbExport(file) {
+function dbExport(file, callback) {
   var db = new _sqlite2.default.Database(file);
 
   db.serialize(function () {
-    db.get('SELECT * FROM col', function (err, results) {
+    db.getAsync('SELECT * FROM col').then(function (results) {
       var decks = JSON.parse(results.decks);
       var models = JSON.parse(results.models);
 
@@ -56,11 +62,9 @@ function dbExport(file) {
         };
       });
 
-      console.log(JSON.stringify(output, null, 2));
+      callback(false, output);
     });
   });
-
-  return output;
 }
 
 exports.default = dbExport;

@@ -6,7 +6,7 @@ var _dbExport2 = _interopRequireDefault(_dbExport);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var output = (0, _dbExport2.default)('./collection.anki2');
-
-console.log(output);
+(0, _dbExport2.default)('./collection.anki2', function (err, result) {
+  console.log(JSON.stringify(result, null, 2));
+});
 //# sourceMappingURL=index.js.map
