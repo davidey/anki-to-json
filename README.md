@@ -1,3 +1,4 @@
-WIP
+**This library is still working-in-progress**
 
-Export Anki collection file into JSON
+# anki-to-json
+A library to export cards from the Anki database into a JSON file
